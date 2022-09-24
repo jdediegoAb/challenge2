@@ -1,0 +1,10 @@
+SELECT cat.id as category_id, cat.category, jo.title, jo.views, jo.id as post_id
+FROM categories cat
+LEFT JOIN LATERAL (SELECT po.id, title, po.views, po.category_id
+          FROM posts po
+          WHERE cat.id = po.category_id
+          ORDER BY po.views DESC
+          FETCH FIRST 2 ROWS ONLY) jo
+--jo on true
+on cat.id = jo.category_id
+ORDER BY category, jo.views DESC, post_id ASC
